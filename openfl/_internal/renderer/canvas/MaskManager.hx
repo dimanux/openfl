@@ -16,7 +16,7 @@ class MaskManager {
 	}
 	
 	
-	public function pushMask (mask:IBitmapDrawable):Void {
+	@:keep public function pushMask (mask:IBitmapDrawable):Void {
 		
 		var context = renderSession.context;
 		
@@ -38,7 +38,7 @@ class MaskManager {
 	}
 	
 	
-	public function pushRect (rect:Rectangle, transform:Matrix):Void {
+	@:keep public function pushRect (rect:Rectangle, transform:Matrix):Void {
 		
 		var context = renderSession.context;
 		context.save ();
@@ -52,7 +52,7 @@ class MaskManager {
 	}
 	
 	
-	public function popMask ():Void {
+	@:keep public function popMask ():Void {
 		
 		renderSession.context.restore ();
 		

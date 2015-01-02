@@ -130,6 +130,12 @@ class BitmapData implements IBitmapDrawable {
 		lime_bitmap_data_destroy_hardware_surface (__handle);
 		
 	}
+	
+	public function reload (source:BitmapData):Void {
+		
+		lime_bitmap_data_reload (__handle, source.__handle);
+		
+	}
 	#end
 	
 	
@@ -749,6 +755,7 @@ class BitmapData implements IBitmapDrawable {
 	private static var lime_bitmap_data_set_array = Lib.load ("lime", "lime_bitmap_data_set_array", 3);
 	private static var lime_bitmap_data_create_hardware_surface = Lib.load ("lime", "lime_bitmap_data_create_hardware_surface", 1);
 	private static var lime_bitmap_data_destroy_hardware_surface = Lib.load ("lime", "lime_bitmap_data_destroy_hardware_surface", 1);
+	private static var lime_bitmap_data_reload = Lib.load ("lime", "lime_bitmap_data_reload", 2);
 	#end
 	private static var lime_bitmap_data_dispose = Lib.load ("lime", "lime_bitmap_data_dispose", 1);
 	private static var lime_bitmap_data_generate_filter_rect = Lib.load ("lime", "lime_bitmap_data_generate_filter_rect", 3);

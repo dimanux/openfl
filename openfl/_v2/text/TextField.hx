@@ -105,6 +105,12 @@ class TextField extends InteractiveObject {
 		
 	}
 	
+	public function getNativeDescription():Dynamic {
+
+		return lime_text_field_get_native_description(__handle);
+
+	}
+	
 	
 	public function replaceText (beginIndex:Int, endIndex:Int, newText:String):Void {
 		
@@ -287,6 +293,7 @@ class TextField extends InteractiveObject {
 	private static var lime_text_field_get_line_text = Lib.load ("lime", "lime_text_field_get_line_text", 2);
 	private static var lime_text_field_get_line_metrics = Lib.load ("lime", "lime_text_field_get_line_metrics", 3);
 	private static var lime_text_field_get_line_offset = Lib.load ("lime", "lime_text_field_get_line_offset", 2);
+	private static var lime_text_field_get_native_description = Lib.load("lime", "lime_text_field_get_native_description", 1);
 	
 	
 }

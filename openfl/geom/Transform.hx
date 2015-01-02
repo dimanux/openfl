@@ -67,9 +67,17 @@ class Transform {
 			
 			__displayObject.x = value.tx;
 			__displayObject.y = value.ty;
-			__displayObject.scaleX = Math.sqrt ((value.a * value.a) + (value.b * value.b));
-			__displayObject.scaleY = Math.sqrt ((value.c * value.c) + (value.d * value.d));
-			__displayObject.rotation = Math.atan2 (value.b, value.a) * (180 / Math.PI);
+			__displayObject.__skewX = Math.atan(-value.c / value.d);
+			__displayObject.__skewY = Math.atan( value.b / value.a);
+			__displayObject.scaleX = value.a / Math.cos(__displayObject.__skewY);
+			__displayObject.scaleY = value.d / Math.cos(__displayObject.__skewX);
+			if (Math.abs(__displayObject.__skewX - __displayObject.__skewY) < 0.001)
+			{
+				__displayObject.rotation = __displayObject.__skewX * 180.0 / Math.PI;
+				__displayObject.__skewX = __displayObject.__skewY = 0.0;
+			}
+			else
+				__displayObject.rotation = 0.0;
 			
 		}
 		

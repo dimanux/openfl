@@ -51,6 +51,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	@:noCompletion private var __parent:DisplayObjectContainer;
 	@:noCompletion private var __scale9Grid:Rectangle;
 	@:noCompletion private var __scrollRect:Rectangle;
+	@:noCompletion private var __stage:Stage;
 	
 	
 	public function new (handle:Dynamic, type:String) {
@@ -357,6 +358,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		if (isOnStage) {
 			
+			__stage = __parent.stage;
 			var event = new Event (Event.ADDED_TO_STAGE, false, false);
 			event.target = this;
 			dispatchEvent (event);
@@ -381,6 +383,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			var event = new Event (Event.REMOVED_FROM_STAGE, false, false);
 			event.target = this;
 			dispatchEvent (event);
+			__stage = null;
 			
 		}
 		
@@ -416,11 +419,19 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			
 		}
 		
-		__parent = parent;
-		
 		if (parent != null) {
 			
-			__onAdded (this, (stage != null));
+			__parent = parent;
+			__onAdded (this, __parent.stage != null);
+			
+		} else if (__parent != null && parent == null) {
+			
+			__onRemoved (this, __stage != null);
+			__parent = parent;
+			
+		} else {
+			
+			__parent = parent;
 			
 		}
 		
@@ -664,13 +675,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	private function get_stage ():Stage {
 		
-		if (__parent != null) {
-			
-			return __parent.stage;
-			
-		}
-		
-		return null;
+		return __stage;
 		
 	}
 	

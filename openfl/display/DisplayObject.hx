@@ -698,6 +698,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	public var y (get, set):Float;
 	
 	@:dox(hide) @:noCompletion public var __worldTransform:Matrix;
+	@:dox(hide) @:noCompletion public var __skewX (get, set):Float;
+	@:dox(hide) @:noCompletion public var __skewY (get, set):Float;
 	
 	@:noCompletion private var __alpha:Float;
 	@:noCompletion private var __filters:Array<BitmapFilter>;
@@ -714,6 +716,14 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	@:noCompletion private var __rotationSine:Float;
 	@:noCompletion private var __scaleX:Float;
 	@:noCompletion private var __scaleY:Float;
+	@:noCompletion private var ___skewX:Float;
+	@:noCompletion private var __skewXCache:Float;
+	@:noCompletion private var __skewXCosine:Float;
+	@:noCompletion private var __skewXSine:Float;
+	@:noCompletion private var ___skewY:Float;
+	@:noCompletion private var __skewYCache:Float;
+	@:noCompletion private var __skewYCosine:Float;
+	@:noCompletion private var __skewYSine:Float;
 	@:noCompletion private var __scrollRect:Rectangle;
 	@:noCompletion private var __transform:Transform;
 	@:noCompletion private var __transformDirty:Bool;
@@ -748,6 +758,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		visible = true;
 		x = 0;
 		y = 0;
+		__skewX = 0;
+		__skewY = 0;
 		
 		__worldAlpha = 1;
 		__worldTransform = new Matrix ();
@@ -1141,14 +1153,27 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			
 		}
 		
+		if (__skewX != __skewXCache) {
+			__skewXCache = __skewX;
+			__skewXSine = Math.sin(__skewXCache);
+			__skewXCosine = Math.cos(__skewXCache);
+		}
+
+		if (__skewY != __skewYCache) {
+			__skewYCache = __skewY;
+			__skewYSine = Math.sin(__skewYCache);
+			__skewYCosine = Math.cos(__skewYCache);
+		}
+		
 		if (parent != null) {
 			
 			var parentTransform = parent.__worldTransform;
 			
-			var a00 = __rotationCosine * scaleX,
-			a01 = __rotationSine * scaleX,
-			a10 = -__rotationSine * scaleY,
-			a11 = __rotationCosine * scaleY,
+			var skew = (__skewX != 0.0) || (__skewY != 0.0);
+			var a00 = skew ? scaleX * __skewYCosine * __rotationCosine - scaleX * __skewYSine * __rotationSine : __rotationCosine * scaleX,
+			a01 = skew ? scaleX * __skewYCosine * __rotationSine + scaleX * __skewYSine * __rotationCosine : __rotationSine * scaleX,
+			a10 = skew ? -scaleY * __skewXSine * __rotationCosine - scaleY * __skewXCosine * __rotationSine : -__rotationSine * scaleY,
+			a11 = skew ? scaleY * __skewXSine * __rotationSine + scaleY * __skewXCosine * __rotationCosine : __rotationCosine * scaleY,
 			b00 = parentTransform.a, b01 = parentTransform.b,
 			b10 = parentTransform.c, b11 = parentTransform.d;
 			
@@ -1171,10 +1196,11 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			
 		} else {
 			
-			__worldTransform.a = __rotationCosine * scaleX;
-			__worldTransform.c = -__rotationSine * scaleY;
-			__worldTransform.b = __rotationSine * scaleX;
-			__worldTransform.d = __rotationCosine * scaleY;
+			var skew = (__skewX != 0.0) || (__skewY != 0.0);
+			__worldTransform.a = skew ? scaleX * __skewYCosine * __rotationCosine - scaleX * __skewYSine * __rotationSine : __rotationCosine * scaleX;
+			__worldTransform.c = skew ?-scaleY * __skewXSine * __rotationCosine - scaleY * __skewXCosine * __rotationSine : -__rotationSine * scaleY;
+			__worldTransform.b = skew ? scaleX * __skewYCosine * __rotationSine + scaleX * __skewYSine * __rotationCosine : __rotationSine * scaleX;
+			__worldTransform.d = skew ? scaleY * __skewXSine * __rotationSine + scaleY * __skewXCosine * __rotationCosine : __rotationCosine * scaleY;
 			
 			if (scrollRect == null) {
 				
@@ -1183,7 +1209,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 				
 			} else {
 				
-				__worldTransform.tx = y - scrollRect.x;
+				__worldTransform.tx = x - scrollRect.x;
 				__worldTransform.ty = y - scrollRect.y;
 				
 			}
@@ -1485,6 +1511,36 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		if (__scaleY != value) __setTransformDirty ();
 		return __scaleY = value;
+		
+	}
+	
+	
+	private function get___skewX ():Float {
+		
+		return ___skewX;
+		
+	}
+	
+	
+	private function set___skewX (value:Float):Float {
+		
+		if (___skewX != value) __setTransformDirty ();
+		return ___skewX = value;
+		
+	}
+	
+	
+	private function get___skewY ():Float {
+		
+		return ___skewY;
+		
+	}
+	
+	
+	private function set___skewY (value:Float):Float {
+		
+		if (___skewY != value) __setTransformDirty ();
+		return ___skewY = value;
 		
 	}
 	

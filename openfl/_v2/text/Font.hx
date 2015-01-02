@@ -128,6 +128,36 @@ class Font {
 	}
 	
 	
+	public static function registerFontFromBytes (bytes:ByteArray):Void {
+
+		var details = loadBytes (bytes);
+		var fontName = details.family_name;
+		var fontStyle;
+						
+		if (details.is_bold && details.is_italic) {
+					
+			fontStyle = FontStyle.BOLD_ITALIC;
+					
+		} else if (details.is_bold) {
+					
+			fontStyle = FontStyle.BOLD;
+			
+		} else if (details.is_italic) {
+			
+			fontStyle = FontStyle.ITALIC;
+			
+		} else {
+			
+			fontStyle = FontStyle.REGULAR;
+			
+		}
+		
+		var fontType = FontType.EMBEDDED;
+		lime_font_register_font (fontName, bytes);
+		__registeredFonts.push (new Font(fontName, fontStyle, fontType));
+	}
+	
+	
 	public function toString ():String {
 		
 		return "{ name=" + fontName + ", style=" + fontStyle + ", type=" + fontType + " }";
