@@ -287,7 +287,7 @@ class Context3D {
 	public function present ():Void {
 		
 		#if html5
-		this.drawing = false;
+		drawing = false;
 		#else
 		drawing = false;
 		GL.useProgram (null);
