@@ -56,6 +56,7 @@ class Texture extends TextureBase {
 		//var p = bitmapData.getRGBAPixels ();
 		//#else
 		var p = bitmapData.getPixels (new Rectangle (0, 0, bitmapData.width, bitmapData.height));
+		p.position = 0;
 		var start : Int = 0, end : Int = p.length, a : Int, r : Int, g : Int, b : Int;
 		while (start < end)
 		{
