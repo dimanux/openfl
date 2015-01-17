@@ -286,12 +286,15 @@ class Context3D {
 	
 	public function present ():Void {
 		
+		#if html5
+		drawing = false;
+		#else
 		drawing = false;
 		GL.useProgram (null);
 		
 		GL.bindBuffer (GL.ARRAY_BUFFER, null);
 		GL.disable (GL.CULL_FACE);
-		
+		#end
 	}
 	
 	
@@ -554,8 +557,23 @@ class Context3D {
 	
 	public function setProgramConstantsFromMatrix (programType:Context3DProgramType, firstRegister:Int, matrix:Matrix3D, transposedMatrix:Bool = false):Void {
 		
-		var locationName = __getUniformLocationNameFromAgalRegisterIndex (programType, firstRegister);
-		setProgramConstantsFromVector (programType, firstRegister, matrix.rawData, 16);
+		var d = matrix.rawData;
+		
+		if (transposedMatrix) {
+			
+			setProgramConstantsFromVector (programType, firstRegister, [ d[0], d[4], d[8], d[12] ], 1);  
+			setProgramConstantsFromVector (programType, firstRegister + 1, [ d[1], d[5], d[9], d[13] ], 1);
+			setProgramConstantsFromVector (programType, firstRegister + 2, [ d[2], d[6], d[10], d[14] ], 1);
+			setProgramConstantsFromVector (programType, firstRegister + 3, [ d[3], d[7], d[11], d[15] ], 1);
+			
+		} else {
+			
+			setProgramConstantsFromVector (programType, firstRegister, [ d[0], d[1], d[2], d[3] ], 1);
+			setProgramConstantsFromVector (programType, firstRegister + 1, [ d[4], d[5], d[6], d[7] ], 1);
+			setProgramConstantsFromVector (programType, firstRegister + 2, [ d[8], d[9], d[10], d[11] ], 1);
+			setProgramConstantsFromVector (programType, firstRegister + 3, [ d[12], d[13], d[14], d[15] ], 1);
+			
+		}
 		
 	}
 	

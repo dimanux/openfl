@@ -56,6 +56,21 @@ class Texture extends TextureBase {
 		//var p = bitmapData.getRGBAPixels ();
 		//#else
 		var p = bitmapData.getPixels (new Rectangle (0, 0, bitmapData.width, bitmapData.height));
+		p.position = 0;
+		var start : Int = 0, end : Int = p.length, a : Int, r : Int, g : Int, b : Int;
+		while (start < end)
+		{
+			a = p.readByte();
+			r = p.readByte();
+			g = p.readByte();
+			b = p.readByte();
+			p.position = start;
+			p.writeByte(r);
+			p.writeByte(g);
+			p.writeByte(b);
+			p.writeByte(a);
+			start += 4;
+		}
 		//#end
 		
 		width = bitmapData.width;
@@ -105,5 +120,5 @@ class Texture extends TextureBase {
 
 
 #else
-typedef Texture = openfl.display3D.textures.Texture;
+typedef Texture = flash.display3D.textures.Texture;
 #end
