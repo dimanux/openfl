@@ -120,5 +120,5 @@ class Texture extends TextureBase {
 
 
 #else
-typedef Texture = openfl.display3D.textures.Texture;
+typedef Texture = flash.display3D.textures.Texture;
 #end
